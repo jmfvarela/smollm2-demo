@@ -1,6 +1,6 @@
 """
 FastAPI server exposing an OpenAI-compatible chat completions endpoint
-for SmolLM2-360M with streaming SSE support.
+for SmolLM2 with streaming SSE support.
 
 Exposes /v1/chat/completions — same format as the OpenAI API.
 Compatible with NextChat, Open WebUI, and any OpenAI-compatible client.
@@ -9,6 +9,9 @@ Usage:
   python server.py
   # or via Docker:
   # docker compose up -d --build
+
+Default model: HuggingFaceTB/SmolLM2-360M-Instruct (configurable via
+SMOLLM2_MODEL_ID env var). Also works with SmolLM2-135M and other sizes.
 """
 
 import json
@@ -51,7 +54,7 @@ def load_model():
     from transformers import AutoModelForCausalLM
 
     cfg = Config.from_hf(MODEL_ID)
-    # Create model in bfloat16 to save RAM: 360M ≈ 725 MB vs 1.5 GB in float32
+    # Create model in bfloat16 to save RAM (vs float32)
     model = SmolLM2ForCausalLM(cfg).to(dtype=torch.bfloat16)
 
     hf_model = AutoModelForCausalLM.from_pretrained(
@@ -75,7 +78,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="SmolLM2-135M API", version="0.1.0", lifespan=lifespan)
+app = FastAPI(title="SmolLM2 API", version="0.1.0", lifespan=lifespan)
 
 
 # ── OpenAI-compatible schemas ─────────────────────────────────────────────────

@@ -15,8 +15,11 @@ docker compose up -d --build
 
 Then open **http://localhost:3001** and start chatting.
 
-> ⚠️ First run downloads ~270 MB of model weights from HuggingFace
-> and takes 2-5 minutes. Subsequent starts are instant (cached).
+> ⚠️ First run downloads model weights from HuggingFace
+> and takes 2-5 minutes (360M-Instruct: ~700 MB, 135M: ~270 MB).
+> Subsequent starts are instant (cached).
+>
+> To use the smaller 135M model: `SMOLLM2_MODEL_ID=HuggingFaceTB/SmolLM2-135M docker compose up -d --build`
 
 The API is at http://localhost:3000 if you want to call it directly:
 
@@ -24,6 +27,29 @@ The API is at http://localhost:3000 if you want to call it directly:
 curl http://localhost:3000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{"model":"smollm2-360m","messages":[{"role":"user","content":"Hello"}]}'
+```
+
+## Models
+
+Two SmolLM2 sizes are supported. The model architecture is **auto-detected**
+from HuggingFace — no manual config needed for either.
+
+| Model | Params | Size (bfloat16) | Download | RAM needed |
+|---|---|---|---|---|
+| `SmolLM2-360M-Instruct` | 360M | ~720 MB | ~700 MB | ~1.2 GB |
+| `SmolLM2-135M` (base) | 135M | ~270 MB | ~270 MB | ~550 MB |
+
+**Docker (default):** `SmolLM2-360M-Instruct` — better quality, slower.
+**Standalone demo** (`python model.py`): `SmolLM2-135M` — faster, less RAM.
+
+Switch via the `SMOLLM2_MODEL_ID` env var or `.env` file:
+```bash
+# Use 135M with Docker
+SMOLLM2_MODEL_ID=HuggingFaceTB/SmolLM2-135M docker compose up -d --build
+
+# Or copy .env.example to .env and edit
+cp .env.example .env
+# Change the MODEL_ID line, then: docker compose up -d --build
 ```
 
 ## Study the model (no Docker)
@@ -35,7 +61,7 @@ python model.py
 
 ## How weights are downloaded
 
-The model does **not include weights in the repo** (~270 MB). They are
+The repo does **not include model weights**. They are
 downloaded automatically from HuggingFace Hub on first run:
 
 1. `AutoModelForCausalLM.from_pretrained(...)` → downloads weights, caches in `~/.cache/huggingface/`
@@ -58,7 +84,9 @@ Subsequent runs use local cache → no re-download.
 ## Architecture
 
 ```
-tokens → Embeddings → TransformerBlock × 30 → RMSNorm → lm_head → logits
+tokens → Embeddings → TransformerBlock × N → RMSNorm → lm_head → logits
+
+N depends on the model (30 for 135M, 40 for 360M — auto-detected).
 
 Each TransformerBlock:
   RMSNorm → Attention (GQA + RoPE + KV-Cache) → (+) residual
@@ -86,9 +114,12 @@ Automatic config: model `smollm2-360m`, connected to the local API.
 
 ## Performance
 
-360M parameters (~720 MB in bfloat16, ~1.4 GB in float32). With KV-cache and SSE streaming:
+**360M-Instruct** (~720 MB in bfloat16, ~1.4 GB in float32):
 
 - **3-5 tok/s** on CPU (2 vCPU) in bfloat16
 - Typical latency: 4-8 seconds for short responses
-- Auto-detects config (layers, heads, dims) from HuggingFace
-- Without KV-cache it would be 2-3× slower
+
+**135M — ~2× faster** (~270 MB in bfloat16). Ideal for quick experiments.
+
+Both models auto-detect config (layers, heads, dims) from HuggingFace.
+Without KV-cache they'd be 2-3× slower.

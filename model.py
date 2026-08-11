@@ -25,7 +25,8 @@ References:
   SwiGLU:  https://arxiv.org/abs/2002.05202
   GQA:     https://arxiv.org/abs/2305.13245
   KV-cache: https://arxiv.org/abs/2210.03057
-  SmolLM2: https://huggingface.co/HuggingFaceTB/SmolLM2-360M-Instruct
+  SmolLM2: https://huggingface.co/HuggingFaceTB/SmolLM2-360M-Instruct (360M)
+           https://huggingface.co/HuggingFaceTB/SmolLM2-135M (135M)
 """
 
 from dataclasses import dataclass
@@ -35,7 +36,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 1. CONFIG — Exact SmolLM2-135M hyperparameters
+# 1. CONFIG — Default hyperparameters (auto-detected via Config.from_hf)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 
