@@ -16,8 +16,8 @@ services:
     environment:
       OPENAI_API_KEY: none
       BASE_URL: http://smollm2-seed:3000
-      CUSTOM_MODELS: smollm2-360m
-      DEFAULT_MODEL: smollm2-360m
+      CUSTOM_MODELS: smollm2
+      DEFAULT_MODEL: smollm2
       HIDE_USER_API_KEY: "1"
       HIDE_BALANCE_QUERY: "1"
     restart: unless-stopped

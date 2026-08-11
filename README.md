@@ -31,7 +31,7 @@ The API is at http://localhost:3000 if you want to call it directly:
 ```bash
 curl http://localhost:3000/v1/chat/completions \
   -H "Content-Type: application/json" \
-  -d '{"model":"smollm2-360m","messages":[{"role":"user","content":"Hello"}]}'
+  -d '{"model":"smollm2","messages":[{"role":"user","content":"Hello"}]}'
 ```
 
 ## Models
@@ -41,8 +41,11 @@ from HuggingFace — no manual config needed for either.
 
 | Model | Params | Size (bfloat16) | Download | RAM needed |
 |---|---|---|---|---|
-| `SmolLM2-360M-Instruct` | 360M | ~720 MB | ~700 MB | ~1.2 GB |
-| `SmolLM2-135M` (base) | 135M | ~270 MB | ~270 MB | ~550 MB |
+| `SmolLM2-360M-Instruct` | 360M | ~720 MB | ~700 MB | ~1.2 GB | Chat / instruct |
+| `SmolLM2-135M` | 135M | ~270 MB | ~270 MB | ~550 MB | Base (completion only) |
+
+> ⚠️ **135M is a base model** — it completes text but doesn't follow instructions.
+> It will produce incoherent output in chat. Use 360M-Instruct for conversations.
 
 **Docker (default):** `SmolLM2-360M-Instruct` — better quality, slower.
 **Standalone demo** (`python model.py`): `SmolLM2-135M` — faster, less RAM.
@@ -115,7 +118,8 @@ Each TransformerBlock:
 `docker compose up -d` launches both the API server and NextChat Web UI.
 NextChat is a PWA — can be installed on mobile as a native app.
 
-Automatic config: model `smollm2-360m`, connected to the local API.
+Automatic config: model `smollm2`, connected to the local API.
+The label is generic — the actual model is determined by `SMOLLM2_MODEL_ID`.
 
 ## Performance
 
