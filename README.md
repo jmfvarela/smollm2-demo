@@ -15,6 +15,8 @@ docker compose up -d --build
 
 Then open **http://localhost:3001** and start chatting.
 
+![SmolLM2 Demo Screenshot](screenshot.jpg)
+
 Stop when done:
 ```bash
 docker compose down
