@@ -15,6 +15,11 @@ docker compose up -d --build
 
 Then open **http://localhost:3001** and start chatting.
 
+Stop when done:
+```bash
+docker compose down
+```
+
 > ⚠️ First run downloads model weights from HuggingFace
 > and takes 2-5 minutes (360M-Instruct: ~700 MB, 135M: ~270 MB).
 > Subsequent starts are instant (cached).
