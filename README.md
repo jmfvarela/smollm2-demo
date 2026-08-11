@@ -47,8 +47,12 @@ from HuggingFace — no manual config needed for either.
 > ⚠️ **135M is a base model** — it completes text but doesn't follow instructions.
 > It will produce incoherent output in chat. Use 360M-Instruct for conversations.
 
-**Docker (default):** `SmolLM2-360M-Instruct` — better quality, slower.
+**Docker (default):** `SmolLM2-360M-Instruct` — better quality, instruction-tuned.
 **Standalone demo** (`python model.py`): `SmolLM2-135M` — faster, less RAM.
+
+> 🌐 **Language:** Both models are primarily English. 360M-Instruct may
+> understand simple Spanish but quality drops significantly. Chat in English
+> for best results.
 
 Switch via the `SMOLLM2_MODEL_ID` env var or `.env` file:
 ```bash
