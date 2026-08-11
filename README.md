@@ -3,18 +3,34 @@
 A didactic implementation of the LLaMA architecture with real weight loading
 from HuggingFace. Built to study how a modern transformer works under the hood.
 
+## Quick Start
+
 ```bash
-# Model only (study / demo)
-python model.py
+git clone git@github.com:jmfvarela/smollm2-demo.git
+cd smollm2-demo
 
-# Full stack (API + NextChat UI)
+# One command → API + Chat UI
 docker compose up -d --build
-# API: http://localhost:3000
-# UI:  http://localhost:3001
+```
 
-# With nginx reverse proxy
-docker compose --profile proxy up -d --build
-# http://localhost:8080
+Then open **http://localhost:3001** and start chatting.
+
+> ⚠️ First run downloads ~270 MB of model weights from HuggingFace
+> and takes 2-5 minutes. Subsequent starts are instant (cached).
+
+The API is at http://localhost:3000 if you want to call it directly:
+
+```bash
+curl http://localhost:3000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{"model":"smollm2-135m","messages":[{"role":"user","content":"Hello"}]}'
+```
+
+## Study the model (no Docker)
+
+```bash
+pip install -r requirements.txt
+python model.py
 ```
 
 ## How weights are downloaded

@@ -2,6 +2,8 @@ services:
   # ── SmolLM2 Chat API ───────────────────────────────
   smollm2-seed:
     build: .
+    ports:
+      - "3000:3000"
     environment:
       SMOLLM2_MODEL_ID: ${SMOLLM2_MODEL_ID:-HuggingFaceTB/SmolLM2-360M-Instruct}
     restart: unless-stopped
@@ -15,6 +17,8 @@ services:
   # ── NextChat Web UI ─────────────────────────────────
   nextchat:
     image: yidadaa/chatgpt-next-web:latest
+    ports:
+      - "3001:3000"
     environment:
       OPENAI_API_KEY: none
       BASE_URL: http://smollm2-seed:3000
