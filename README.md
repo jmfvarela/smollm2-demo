@@ -23,7 +23,7 @@ The API is at http://localhost:3000 if you want to call it directly:
 ```bash
 curl http://localhost:3000/v1/chat/completions \
   -H "Content-Type: application/json" \
-  -d '{"model":"smollm2-135m","messages":[{"role":"user","content":"Hello"}]}'
+  -d '{"model":"smollm2-360m","messages":[{"role":"user","content":"Hello"}]}'
 ```
 
 ## Study the model (no Docker)
@@ -48,7 +48,7 @@ Subsequent runs use local cache → no re-download.
 
 | File | Purpose |
 |------|---------|
-| `model.py` | Full documented implementation (~430 lines). Importable, runnable. |
+| `model.py` | Full documented implementation (465 lines). Importable, runnable. |
 | `server.py` | FastAPI with `/v1/chat/completions` (OpenAI-compatible) + SSE streaming |
 | `Dockerfile` | Python 3.13 container with CPU-only Torch |
 | `requirements.txt` | Python dependencies |
@@ -82,7 +82,7 @@ Each TransformerBlock:
 `docker compose up -d` launches both the API server and NextChat Web UI.
 NextChat is a PWA — can be installed on mobile as a native app.
 
-Automatic config: model `smollm2-135m`, connected to the local API.
+Automatic config: model `smollm2-360m`, connected to the local API.
 
 ## Performance
 

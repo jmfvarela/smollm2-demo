@@ -8,7 +8,7 @@ Compatible with NextChat, Open WebUI, and any OpenAI-compatible client.
 Usage:
   python server.py
   # or via Docker:
-  # docker compose --profile smollm2 up -d
+  # docker compose up -d --build
 """
 
 import json
@@ -86,7 +86,7 @@ class ChatMessage(BaseModel):
 
 
 class ChatCompletionRequest(BaseModel):
-    model: str = "smollm2-135m"
+    model: str = "smollm2-360m"
     messages: list[ChatMessage]
     temperature: float = Field(default=0.7, ge=0.0, le=2.0)
     max_tokens: int = Field(default=128, ge=1, le=256)
