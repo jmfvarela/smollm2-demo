@@ -42,12 +42,14 @@ import torch.nn.functional as F
 
 @dataclass
 class Config:
+    # Defaults match SmolLM2-360M-Instruct. They are illustrative only —
+    # Config.from_hf() overrides ALL fields from the actual HuggingFace model.
     vocab_size: int = 49152
-    hidden_size: int = 576
-    num_hidden_layers: int = 30
-    num_attention_heads: int = 9
-    num_key_value_heads: int = 3        # GQA ratio 3:1
-    intermediate_size: int = 1536        # ≈ 8/3 × hidden_size
+    hidden_size: int = 960
+    num_hidden_layers: int = 32
+    num_attention_heads: int = 15
+    num_key_value_heads: int = 5        # GQA ratio 3:1
+    intermediate_size: int = 2560        # ≈ 8/3 × hidden_size
     rms_norm_eps: float = 1e-5
     rope_theta: float = 100000.0
     max_position_embeddings: int = 8192
