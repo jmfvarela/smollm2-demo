@@ -50,7 +50,7 @@ from HuggingFace — no manual config needed for either.
 > It will produce incoherent output in chat. Use 360M-Instruct for conversations.
 
 **Docker (default):** `SmolLM2-360M-Instruct` — better quality, instruction-tuned.
-**Standalone demo** (`python model.py`): `SmolLM2-135M` — faster, less RAM.
+**Standalone demo** (`python model.py`): `SmolLM2-360M-Instruct` — instruction-tuned, better output.
 
 > 🌐 **Language:** Both models are primarily English. 360M-Instruct may
 > understand simple Spanish but quality drops significantly. Chat in English
@@ -99,7 +99,7 @@ Subsequent runs use local cache → no re-download.
 ```
 tokens → Embeddings → TransformerBlock × N → RMSNorm → lm_head → logits
 
-N depends on the model (30 for 135M, 40 for 360M — auto-detected).
+N depends on the model (30 for 135M, 32 for 360M — auto-detected).
 
 Each TransformerBlock:
   RMSNorm → Attention (GQA + RoPE + KV-Cache) → (+) residual

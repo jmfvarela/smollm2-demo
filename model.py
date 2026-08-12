@@ -450,7 +450,7 @@ def _sample_top_p(logits: torch.Tensor, top_p: float) -> torch.Tensor:
 if __name__ == "__main__":
     from transformers import AutoTokenizer, AutoModelForCausalLM
 
-    MODEL_ID = "HuggingFaceTB/SmolLM2-135M"
+    MODEL_ID = "HuggingFaceTB/SmolLM2-360M-Instruct"
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     print(f"Loading tokenizer and weights from {MODEL_ID}...")
