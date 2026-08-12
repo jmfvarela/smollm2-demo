@@ -392,9 +392,9 @@ class SmolLM2ForCausalLM(nn.Module):
 
         # ── Prefill: process full prompt, cache K,V ──────────
         logits, kv_caches = self(input_ids, kv_caches=None)
-        logits = logits[:, -1, :] / temperature
+        logits = logits[:, -1, :]
 
-        next_token = _sample_top_p(logits, top_p)
+        next_token = _pick_token(logits, temperature, top_p)
         yield next_token
 
         # ── Decode: generate token by token using cache ──────
@@ -403,10 +403,21 @@ class SmolLM2ForCausalLM(nn.Module):
                 break
 
             logits, kv_caches = self(next_token, kv_caches=kv_caches)
-            logits = logits[:, -1, :] / temperature
+            logits = logits[:, -1, :]
 
-            next_token = _sample_top_p(logits, top_p)
+            next_token = _pick_token(logits, temperature, top_p)
             yield next_token
+
+
+def _pick_token(
+    logits: torch.Tensor, temperature: float, top_p: float
+) -> torch.Tensor:
+    """
+    Pick next token: greedy (argmax) when temperature=0, else top-p sampling.
+    """
+    if temperature == 0:
+        return logits.argmax(dim=-1, keepdim=True)
+    return _sample_top_p(logits / temperature, top_p)
 
 
 def _sample_top_p(logits: torch.Tensor, top_p: float) -> torch.Tensor:
@@ -419,7 +430,14 @@ def _sample_top_p(logits: torch.Tensor, top_p: float) -> torch.Tensor:
     cutoff[..., 1:] = cutoff[..., :-1].clone()
     cutoff[..., 0] = False
     probs_sort[cutoff] = 0.0
-    probs_sort /= probs_sort.sum(dim=-1, keepdim=True)
+
+    denom = probs_sort.sum(dim=-1, keepdim=True)
+    probs_sort = torch.where(
+        denom > 0, probs_sort / denom, torch.zeros_like(probs_sort)
+    )
+    # Guard: if all probs zero (extreme top_p), fall back to first token
+    if (denom == 0).any():
+        probs_sort[denom.squeeze(-1) == 0, 0] = 1.0
 
     next_token = torch.multinomial(probs_sort, 1)
     return probs_idx.gather(-1, next_token)

@@ -36,6 +36,12 @@ curl http://localhost:3000/v1/chat/completions \
   -d '{"model":"smollm2","messages":[{"role":"user","content":"Hello"}]}'
 ```
 
+Quick smoke test (one line):
+
+```bash
+curl -sf http://localhost:3000/health && curl -s http://localhost:3000/v1/chat/completions -H "Content-Type: application/json" -d '{"messages":[{"role":"user","content":"Hello"}],"max_tokens":16}' | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['choices'][0]['message']['content'])"
+```
+
 ## Models
 
 Two SmolLM2 sizes are supported. The model architecture is **auto-detected**
