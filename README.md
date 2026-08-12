@@ -72,6 +72,24 @@ cp .env.example .env
 python3 -m venv .venv && source .venv/bin/activate && pip install torch --index-url https://download.pytorch.org/whl/cpu && pip install -r requirements.txt && python model.py
 ```
 
+Expected output:
+
+```
+Model loaded: 361,821,120 parameters on cpu
+
+Prompt: The capital of France is
+  The capital of France is Paris, and it is known for its iconic landmarks such as the Eiffel Tower...
+  20 tokens in ~3.3s (~6 tok/s)
+
+Prompt: def fibonacci(n):
+  def fibonacci(n):
+    if n <= 1:
+        return n
+    else:
+        return fibonacci(n-
+  20 tokens in ~3.3s (~6 tok/s)
+```
+
 ## How weights are downloaded
 
 The repo does **not include model weights**. They are
