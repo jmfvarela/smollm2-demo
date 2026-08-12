@@ -476,7 +476,7 @@ if __name__ == "__main__":
 
         t0 = time.time()
         output_ids = custom_model.generate(
-            input_ids, max_new_tokens=20, temperature=0.7, top_p=0.9,
+            input_ids, max_new_tokens=50, temperature=0.7, top_p=0.9,
             eos_token_id=tokenizer.eos_token_id,
         )
         elapsed = time.time() - t0

@@ -69,7 +69,7 @@ cp .env.example .env
 ## Study the model — run `model.py` directly (one-liner smoke test)
 
 ```bash
-python3 -m venv .venv && source .venv/bin/activate && pip install torch --index-url https://download.pytorch.org/whl/cpu && pip install -r requirements.txt && python model.py
+python3 -m venv .venv && source .venv/bin/activate && pip install torch --index-url https://download.pytorch.org/whl/cpu && pip install -r requirements.txt && python3 model.py
 ```
 
 Expected output:
@@ -78,16 +78,16 @@ Expected output:
 Model loaded: 361,821,120 parameters on cpu
 
 Prompt: The capital of France is
-  The capital of France is Paris, and it is known for its iconic landmarks such as the Eiffel Tower...
-  20 tokens in ~3.3s (~6 tok/s)
+  The capital of France is Paris.
+  50 tokens in ~8s (~6 tok/s)
 
 Prompt: def fibonacci(n):
   def fibonacci(n):
-    if n <= 1:
-        return n
-    else:
-        return fibonacci(n-
-  20 tokens in ~3.3s (~6 tok/s)
+    fib_list = [0, 1]
+    while len(fib_list) < n:
+        fib_list.append(fib_list[-1] + fib_list[-2])
+    return fib_list
+  50 tokens in ~7s (~7 tok/s)
 ```
 
 ## How weights are downloaded
