@@ -69,7 +69,7 @@ cp .env.example .env
 ## Study the model — run `model.py` directly (one-liner smoke test)
 
 ```bash
-pip install -r requirements.txt && python model.py
+python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt && python model.py
 ```
 
 ## How weights are downloaded
